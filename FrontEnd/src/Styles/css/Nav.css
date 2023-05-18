@@ -1,0 +1,17 @@
+.logo{
+    border: 1px solid #BE1D1B;
+}
+.NavName{
+    font-family: 'Reem Kufi';
+}
+.NavName:hover{
+    background-color: none;
+}
+.btnDialog:hover{
+    color: #BE1D1B;
+    border: 1px solid #BE1D1B;
+    box-sizing: border-box;
+}
+.card:hover{
+    cursor: pointer;
+}

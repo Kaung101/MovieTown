@@ -1,0 +1,15 @@
+/* login & cancel button hover */
+.btn:hover{
+    cursor: pointer;
+}
+.btnDialog:hover{
+    background-color: #BE1D1B;
+    color: #BE1D1B;
+    border: 1px solid #BE1D1B;
+    box-sizing: border-box;
+}
+.successbtnDialog:hover{
+    color: #4BB543;
+    border:1px solid #4BB543;
+
+}
