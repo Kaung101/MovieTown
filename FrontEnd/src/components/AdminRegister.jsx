@@ -1,8 +1,10 @@
 import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import {theme} from '../Styles/theme/theme';
+import Axios from '../utils/Axios';
 import '../Styles/css/Login.css';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+import { useHistory , useNavigate} from 'react-router-dom/cjs/react-router-dom';
+import { useMutation } from 'react-query';
 function AdminRegister() {
     //check for username, pwd, email and phno
     const [username, setName] = useState('');
@@ -14,7 +16,15 @@ function AdminRegister() {
     const [com, setCom] = useState('none');
     const [emailAlert, setEmailAlert] = useState('none');
     const history = useHistory();
-    //Handle submit
+
+    const {data, error, mutate} = useMutation(() => Axios.post('/adminRegister', {
+        username,
+        pwd,
+        phNo,
+        email,
+    }));
+
+    //mutation//Handle submit
     const handleSubmit = (e) => {
         e.preventDefault();
         if((username != '' && pwd != '' && phNo != '' && email != '')||
@@ -35,7 +45,11 @@ function AdminRegister() {
             }
             else{
                 //submit the info
-                history.push("/");
+                //create object
+                mutate();
+                history.push('/AdminLogin');
+                
+
             }
         }
         else{
@@ -86,6 +100,7 @@ function AdminRegister() {
         color:'#BE1D1B',
       }
   return (
+    //wrapper
     <Box className="register-container">
         {/* //outer Grid */}
     <Grid  
@@ -129,10 +144,10 @@ function AdminRegister() {
                         <Typography display={emailAlert} style={alertStyle}>Email Address should include @</Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant='subtitle1' component='label' htmlFor='rpassword' sx={labelStyle} type="password">
+                        <Typography variant='subtitle1' component='label' htmlFor='rpassword' sx={labelStyle} >
                             Password
                         </Typography>
-                        <TextField value={pwd} onChange={(e) => {setPwd(e.target.value);}} required fullWidth id="rpassword" variant="outlined"></TextField>
+                        <TextField value={pwd} onChange={(e) => {setPwd(e.target.value);}} required fullWidth type="password" id="rpassword" variant="outlined"></TextField>
                         <Typography display={alert} style={alertStyle}>Password should be 8 characters or more and should have at least one digit,A-Z and a-z.</Typography>
                     </Grid>
                     {/* button */}

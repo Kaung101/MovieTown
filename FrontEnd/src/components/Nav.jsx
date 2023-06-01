@@ -1,5 +1,7 @@
 import { AppBar, Avatar, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, IconButton, InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, alpha, styled, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie'
+import { useHistory } from 'react-router-dom';
 import '../Styles/css/Nav.css';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -8,11 +10,19 @@ import HomeIcon from '@mui/icons-material/Home';
 import MovieFilterIcon from '@mui/icons-material/MovieFilter';
 import CloseIcon from '@mui/icons-material/Close';
 import LoginIcon from '@mui/icons-material/Login';
+import Axios from '../utils/Axios';
 function Nav() {
   const theme = useTheme();
   const [openDialog, setOpenDialog] = useState(false);
+  const [cookies, setCookies] = useCookies(['userType', 'findWord'] ); 
   const [searchValue, setSearchValue] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [data, setData] = React.useState([]);
+
+  const history = useHistory();
+  //get uerType from cookies
+  const userType = cookies.userType;
+  const [status, setStatus] = useState("Log in");
     //customize header for drawer
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
@@ -23,7 +33,12 @@ function Nav() {
         justifyContent: 'flex-end',
       }));
   useEffect(() =>  {
-      document.title = "Home - Movie Review Town";
+      document.title = "Movie Review Town";
+      if(userType != undefined && userType != ''){
+        setStatus(userType);
+      }else{
+        setStatus("Log in");
+      }
   }, []);
   //dialog search
   const handleDialogOpen = () =>{
@@ -39,6 +54,13 @@ function Nav() {
   const closeDrawer = () => {
     setOpenDrawer(false);
   }
+
+  //logout
+  const handleLogout = () => {
+    setCookies('userType', '');
+    history.push('/');
+  }
+  
   //dialog style 
   const dialogBtn = {
     backgroundColor: theme.palette.tertiary.main,
@@ -46,9 +68,29 @@ function Nav() {
   //handle search input value
   const handleSearch = () => {
     const findWord = searchValue;
+    //set cookies
+    setCookies('findWord', findWord);
+    //reset search value
     setSearchValue("");
-    //direct to next page
+    console.log(findWord);
+    
+    //redirect to MovieList page with data
+    history.push({
+      pathname: '/search',
+      state: { SearchResult: data }
+    });
   }
+  
+  //handle Nav
+  const handleNav = () => {
+    if(userType == undefined || userType == ''){
+      history.push(`/login`);
+    }
+    else{
+      console.log('Already login');
+    }
+  }
+
   //styling dialog box
   const CustomDia = styled(Dialog)(() => ({
     position: 'absolute',
@@ -100,9 +142,9 @@ function Nav() {
                 <Box sx={{ flexGrow: 3 }} />
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} >
                     <Typography component='a' href='/'  sx={{ my: 2, mx:5, textDecoration:'none', color: 'black', display: 'block' }} className='NavName' fontFamily="'Reem Kufi', sans-seri">Home</Typography>
-                    <Typography component='a' href='/'  sx={{ my: 2, mx:5, textDecoration:'none', color: 'black', display: 'block' }} className='NavName' fontFamily="'Reem Kufi', sans-seri">Top Movies</Typography>
-                    <Typography component='a' href='/'  sx={{ my: 2, mx:5, textDecoration:'none', color: 'black', display: 'block' }} className='NavName' fontFamily="'Reem Kufi', sans-seri">New Releases</Typography>
-                    <Typography component='a' href='/login'  sx={{ my: 2, mx:5, textDecoration:'none', color: 'black', display: 'block' }} className='NavName' fontFamily="'Reem Kufi', sans-seri">Log in</Typography>
+                    <Typography component='a' href='/top'  sx={{ my: 2, mx:5, textDecoration:'none', color: 'black', display: 'block' }} className='NavName' fontFamily="'Reem Kufi', sans-seri">Top Movies</Typography>
+                    <Typography component='a' href='/newRelease'  sx={{ my: 2, mx:5, textDecoration:'none', color: 'black', display: 'block' }} className='NavName' fontFamily="'Reem Kufi', sans-seri">New Releases</Typography>
+                    <Typography component='a' onClick={handleNav}  sx={{ my: 2, mx:5, textDecoration:'none', color: '#BE1D1B', display: 'block' }} className='NavName LoginButton' fontFamily="'Reem Kufi', sans-seri">{status}</Typography>
                 </Box>
                 {/* Search Button for lg screen */}
                 <Search sx={{display:{xs:'none', md:'block'}, px:2}} onClick={handleDialogOpen} >
@@ -115,7 +157,7 @@ function Nav() {
                 <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 , display:{xs:'block', md:'none'}}} onClick={handleDialogOpen}>
                   <SearchIcon />
                 </IconButton>
-                <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 , display:{xs:'block', md:'none'}}}>
+                <IconButton onClick={handleLogout} edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 , display:{xs:'block', md:'none'}}}>
                   <LogoutIcon />
                 </IconButton>
               </Toolbar>
@@ -126,8 +168,8 @@ function Nav() {
         <DialogContent>
           <DialogContentText fontFamily="'Reem Kufi', sans-seri">
             <Search onClick={handleDialogOpen}>
-              <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} onClick={handleSearch} value={searchValue}/>
-              <IconButton color='inherit' aria-label='button'>
+              <StyledInputBase placeholder="Search…" style={{ cursor: 'text', caretColor:'auto' }} value={searchValue} onChange={(e) => {setSearchValue(e.target.value)}}   inputProps={{ 'aria-label': 'search' }} />
+              <IconButton color='inherit' aria-label='button' onClick={handleSearch}>
                 <SearchIcon/>
               </IconButton>
             </Search>
@@ -151,7 +193,7 @@ function Nav() {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component='a' href='/'>
+            <ListItemButton component='a' href='/all'>
               <ListItemIcon style={{color:'#fff'}}>
                 <MovieFilterIcon />
               </ListItemIcon>
@@ -159,7 +201,7 @@ function Nav() {
             </ListItemButton>
           </ListItem>
          <ListItem disablePadding>
-            <ListItemButton component='a' href='/login'>
+            <ListItemButton onClick={handleNav} component='a' href='/login'>
               <ListItemIcon style={{color:'#fff'}}>
                 <LoginIcon />
               </ListItemIcon>

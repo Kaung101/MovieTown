@@ -1,5 +1,7 @@
 import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import Axios from '../utils/Axios';
+import { useMutation } from 'react-query';
 import {theme} from '../Styles/theme/theme';
 import '../Styles/css/Login.css';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
@@ -14,6 +16,13 @@ function Register() {
     const [com, setCom] = useState('none');
     const [emailAlert, setEmailAlert] = useState('none');
     const history = useHistory();
+    //integration
+    const {data, error, mutate} = useMutation(() => Axios.post('/register', {
+        username,
+        pwd,
+        phNo,
+        email,
+    }));
     //Handle submit
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -35,7 +44,8 @@ function Register() {
             }
             else{
                 //submit the info
-                history.push("/");
+                mutate();
+                history.push("/login");
             }
         }
         else{
@@ -129,10 +139,10 @@ function Register() {
                         <Typography display={emailAlert} style={alertStyle}>Email Address should include @</Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant='subtitle1' component='label' htmlFor='rpassword' sx={labelStyle} type="password">
+                        <Typography variant='subtitle1' component='label' htmlFor='rpassword' sx={labelStyle} >
                             Password
                         </Typography>
-                        <TextField value={pwd} onChange={(e) => {setPwd(e.target.value);}} required fullWidth id="rpassword" variant="outlined"></TextField>
+                        <TextField value={pwd} onChange={(e) => {setPwd(e.target.value);}} required fullWidth type="password" id="rpassword" variant="outlined"></TextField>
                         <Typography display={alert} style={alertStyle}>Password should be 8 characters or more and should have at least one digit,A-Z and a-z.</Typography>
                     </Grid>
                     <Grid item xs={12}>

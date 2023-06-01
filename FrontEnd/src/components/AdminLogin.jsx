@@ -3,19 +3,33 @@ import { Grid, TextField,Button, Typography, Avatar, Dialog, DialogTitle, Dialog
 import { theme } from '../Styles/theme/theme';
 import '../Styles/css/Login.css';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+import Axios from '../utils/Axios';
+import { useCookies } from 'react-cookie';
+import { useMutation } from 'react-query';
 const AdminLogin = () => {
-  const [username, setName] = useState('');
-  const [pwd, setPwd] = useState('');
+  
+  const [usernameLogin, setNameLogin] = useState('');
+  const [pwdLogin, setPwdLogin] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   //handleSubmit
   const history = useHistory();
+  //set user Type
+  const [cookies, setCookies, removeCookie] = useCookies([''] ); 
+  setCookies('userType', usernameLogin);
+  //integration
+  const {data, error, mutate} = useMutation(() => Axios.post('/adminLogin', {
+    usernameLogin,
+    pwdLogin,
+  }));
+console.log(usernameLogin, pwdLogin, "hello");
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(username == "" || pwd == "" ){
+    if(usernameLogin == "" || pwdLogin == "" ){
       setOpenDialog(true);
     }else{
-    const info = {username, pwd};
-    history.push('/');
+      mutate(); 
+      if(error) console.log('error');
+      else  history.push('/adminhome');
     //check with db
     }
   }
@@ -83,13 +97,13 @@ const AdminLogin = () => {
               <Typography variant="subtitle1" component="label" htmlFor="username"  sx={labelStyle}>
                 Username
               </Typography>
-              <TextField value={username} onChange={(e) => {setName(e.target.value)}} required fullWidth id="username" variant="outlined" />
+              <TextField value={usernameLogin} onChange={(e) => {setNameLogin(e.target.value)}} required fullWidth id="username" variant="outlined" />
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" component="label" htmlFor="password" sx={labelStyle}>
                 Password
               </Typography>
-              <TextField value={pwd} onChange={(e) => {setPwd(e.target.value)}} required fullWidth type="password" id="password" variant="outlined" />
+              <TextField value={pwdLogin} onChange={(e) => {setPwdLogin(e.target.value)}} required fullWidth type="password" id="password" variant="outlined" />
             </Grid>
             <Grid item xs={6} md={6}>
               <Button onClick={handleSubmit} size="small" variant="contained" style={buttonLoginStyle}  >

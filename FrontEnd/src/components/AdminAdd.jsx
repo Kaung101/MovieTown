@@ -1,7 +1,53 @@
-import React from 'react'
-import { Box, Grid,TextField, Button, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Box, Grid,TextField, Button, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material'
 import AdminNav from './AdminNav'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+import { useMutation } from 'react-query';
+import Axios from '../utils/Axios';
 function AdminAdd() {
+    const history = useHistory();
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [movieCover, setMovieCover] = useState(''); 
+    const [openDialog, setOpenDialog] = useState(false);
+
+    //integration
+    const {data, error, mutate} = useMutation(() => Axios.post('/adminAdd', {
+        title,
+        description,
+        movieCover,
+        }));
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if(title == "" || description == "" || movieCover == ""){
+            console.log('error');
+        }else{
+            mutate();
+            setOpenDialog(true);
+
+        }
+    }
+    //handleCancel
+    const handleCancel = () => {
+        history.push("/adminhome");
+    };
+    //closeDialog
+    const closeDialog = () => {
+        setOpenDialog(false);
+        history.push('/adminhome');
+    }
+    
+    useEffect(() => {
+        if (openDialog) {
+          const timeout = setTimeout(() => {
+            setOpenDialog(false);
+            history.push('/adminhome');
+          }, 2000);
+    
+          return () => clearTimeout(timeout);
+        }
+      }, [openDialog, history]);
+
     const labelStyle = {
         float: 'left',
         fontFamily:'Reem kufi, sans-serif'
@@ -35,30 +81,30 @@ function AdminAdd() {
                         <Typography variant='subtitle1' component='label' htmlFor='title' sx={labelStyle}>
                             Title
                         </Typography>
-                        <TextField  required fullWidth id="title" variant="outlined"></TextField>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Typography variant='subtitle1' component='label' htmlFor='image' sx={labelStyle}>
-                            Image Path
-                        </Typography>
-                        <TextField  required fullWidth id="image" variant="outlined"></TextField>
+                        <TextField value={title} onChange={(e) => {setTitle(e.target.value)}} required fullWidth id="title" variant="outlined"></TextField>
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant='subtitle1' component='label' htmlFor='description' sx={labelStyle}>
                             Description
                         </Typography>
-                        <TextField required type="text" fullWidth id="description" variant="outlined"></TextField>
+                        <TextField value={description} onChange={(e) => {setDescription(e.target.value)}} required type="text" fullWidth id="description" variant="outlined"></TextField>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant='subtitle1' component='label' htmlFor='movie_cover' sx={labelStyle}>
+                            Movie Cover URL
+                        </Typography>
+                        <TextField value={movieCover} onChange={(e) => {setMovieCover(e.target.value)}} required type="text" fullWidth id="movie_cover" variant="outlined"></TextField>
                     </Grid>
                     {/* button */}
                     <Grid item xs={6} md={6}>
-                        <Button  size="small" variant="contained" style={buttonRegisterStyle}  >
+                        <Button onClick={handleSubmit} size="small" variant="contained" style={buttonRegisterStyle}  >
                             <Typography className='btn' variant="subtitle2" component="label" fontFamily="'Reem Kufi', sans-serif">
                                 Add
                             </Typography>
                         </Button>
                     </Grid>
                     <Grid item xs={6} md={6} >
-                        <Button  size="small" variant="contained" style={buttonCancelStyle}>
+                        <Button onClick={handleCancel}  size="small" variant="contained" style={buttonCancelStyle}>
                             <Typography className='btn' variant="subtitle2" component="label"  fontFamily="'Reem Kufi', sans-serif">
                                 Cancel
                             </Typography>                
@@ -68,6 +114,21 @@ function AdminAdd() {
                 </form>
                 </Grid>
             </Grid>
+
+            {/* Success Box */}
+      <Dialog open={openDialog} onClose={closeDialog} >
+        <DialogTitle >Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText fontFamily="'Reem Kufi', sans-seri">
+            Successfully Added a New Movie.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button  fontFamily="'Reem Kufi', sans-seri" sx={{color:'#000'}} className='btnDialog' onClick={closeDialog}>OK</Button>
+        </DialogActions>
+      </Dialog>
+
+
         </Box>
   )
 }

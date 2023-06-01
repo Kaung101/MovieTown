@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Grid, TextField,Button, Typography, Avatar, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { theme } from '../Styles/theme/theme';
 import '../Styles/css/Login.css';
+import Axios from '../utils/Axios';
+import { useCookies } from 'react-cookie';
+import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 const LoginForm = () => {
   const [username, setName] = useState('');
@@ -9,12 +12,21 @@ const LoginForm = () => {
   const [openDialog, setOpenDialog] = useState(false);
   //handleSubmit
   const history = useHistory();
+  //set user Type
+  const [cookies, setCookies, removeCookie] = useCookies([''] ); 
+  setCookies('userType', username);
+  //integration
+  const {data, error, mutate} = useMutation(() => Axios.post('/login', {
+    username,
+    pwd,
+  }));
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if(username == "" || pwd == "" ){
       setOpenDialog(true);
     }else{
-    const info = {username, pwd};
+    mutate();
     history.push('/');
     //check with db
     }

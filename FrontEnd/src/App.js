@@ -13,8 +13,12 @@ import AdminAdd from './components/AdminAdd';
 import AdminUpdate from './components/AdminUpdate';
 import AdminRegister from './components/AdminRegister';
 import AdminLogin from './components/AdminLogin';
+import NewRelease from './components/NewRelease';
+import TopMovie from './components/TopMovie';
+import AllMovie from './components/AllMovie';
 function App() {
   return (
+    <>
     <Router>
         <div className="App">
           <Switch>
@@ -42,14 +46,26 @@ function App() {
             <Route exact path="/adminAdd">
               <AdminAdd/>
             </Route>
-            <Route exact path="/adminUpdate">
+            <Route exact path="/adminUpdate/:movieId">
               <AdminUpdate/>
+            </Route>
+            <Route exact path="/detail/:movieId">
+              <MovieDetail/>
             </Route>
             <Route exact path="/adminRegister">
               <AdminRegister/>
             </Route>
             <Route exact path="/adminLogin">
               <AdminLogin/>
+            </Route>
+            <Route exact path="/newRelease">
+              <NewRelease/>
+            </Route>
+            <Route exact path="/top">
+              <TopMovie/>
+            </Route>
+            <Route exact path="/all">
+              <AllMovie/>
             </Route>
             <Route path="*">
               <FileNotFound/>
@@ -58,6 +74,7 @@ function App() {
           </Switch>
         </div>
     </Router>
+    </>
     
   );
 }
