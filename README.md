@@ -43,26 +43,29 @@ use
 - **User-Friendly Interface**: The application features an intuitive and responsive user interface, making it easy for users to navigate, explore movies, read and write reviews.
 
 ## Project Structure
-# User
-- **src/** : Contains the source code files for the application.
--**compnents/** :  Contains React components used in the application.
--**Register.jsx**: Component for user registration
--**Login.jsx** : Component for user authentication
--**Home.jsx** : Homepage component
--**MovieDetail.jsx** : Component for displaying details of a movie
--**MovieList.jsx** : Component for displaying a list of movies based on search criteria.
--**NewRelease.jsx** : Component for displaying a list of recently released movies.
--**TopMovie.jsx** : Component for displaying a list of top-viewed movies.
--**AllMovie.jsx** : Component for displaying all movies
--**UserProfile.jsx** : Component for user profile information
--**FileNotFound.jsx** : Component for rendering a "404 Not Found" page.
+
+### User
+
+- `src/`: Contains the source code files for the application.
+  - `components/`: Contains React components used in the application.
+    - `Register.jsx`: Component for user registration.
+    - `Login.jsx`: Component for user authentication.
+    - `Home.jsx`: Homepage component.
+    - `MovieDetail.jsx`: Component for displaying details of a movie.
+    - `MovieList.jsx`: Component for displaying a list of movies based on search criteria.
+    - `NewRelease.jsx`: Component for displaying a list of recently released movies.
+    - `TopMovie.jsx`: Component for displaying a list of top-viewed movies.
+    - `AllMovie.jsx`: Component for displaying all movies.
+    - `UserProfile.jsx`: Component for user profile information.
+    - `FileNotFound.jsx`: Component for rendering a "404 Not Found" page.
+
 
 # Admin
--**AdminHome.jsx** : Dashboard component for administrative tasks.
--**AdminAdd.jsx** : Component for adding new movies to the system.
--**AdminUpdate.jsx** : Component for updating the details of a specific movie.
--**AdminRegister.jsx** : Component for registering new administrators.
--**AdminLogin.jsx** : Component for authentication.
+- `AdminHome.jsx`: Dashboard component for administrative tasks.
+- `AdminAdd.jsx`: Component for adding new movies to the system.
+- `AdminUpdate.jsx`: Component for updating the details of a specific movie.
+- `AdminRegister.jsx`: Component for registering new administrators.
+- `AdminLogin.jsx`: Component for authentication.
 
 ## Available Endpoints/Routes
 
