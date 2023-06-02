@@ -47,7 +47,7 @@ function AdminRegister() {
                 //submit the info
                 //create object
                 mutate();
-                history.push('/AdminLogin');
+                history.push('/adminLogin');
                 
 
             }

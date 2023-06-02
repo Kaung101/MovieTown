@@ -123,7 +123,7 @@ console.log(usernameLogin, pwdLogin, "hello");
         </form>
 
         <Grid item xs={12} md={6} style={{float:'left'}} mt={2}>
-           <a href="/register" style={{color:'black'}}>Create a New Account</a>
+           <a href="/adminRegister" style={{color:'black'}}>Create a New Account</a>
         </Grid>
       </Grid>
       {/* Dialog Box */}
