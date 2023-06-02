@@ -60,7 +60,7 @@ use
     - `FileNotFound.jsx`: Component for rendering a "404 Not Found" page.
 
 
-# Admin
+### Admin
 - `AdminHome.jsx`: Dashboard component for administrative tasks.
 - `AdminAdd.jsx`: Component for adding new movies to the system.
 - `AdminUpdate.jsx`: Component for updating the details of a specific movie.
