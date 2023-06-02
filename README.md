@@ -17,7 +17,7 @@ This repository contain backend and frontend
 | data | JSON | the actual data |
 
 ## Database schema
-![Database schema](https://drive.google.com/file/d/1O3y0Rqo3tT0JOiVFs6kSL4la9dY0npe6/view)
+![Database schema](https://drive.google.com/file/d/1O3y0Rqo3tT0JOiVFs6kSL4la9dY0npe6/view?usp=drive_link)
 
 
 ## To run the frontend and backend in developmode 
